@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, type MouseEvent as ReactMouseEvent } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { gsap } from 'gsap'
-import { CheckCircle2, ShieldCheck, Users } from 'lucide-react'
+import { CheckCircle2, ShieldCheck, Sparkles, Users } from 'lucide-react'
 import { HeroParticles } from '../effects/HeroParticles'
 import { Button } from '../ui/Button'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
@@ -19,11 +19,15 @@ const indicators = [
 ]
 
 const floatingCode = [
-  { text: 'const future = () => you.build();', position: 'left-2 top-[22%] sm:left-6', delay: 0 },
-  { text: 'while (learning) { grow(); }', position: 'left-2 top-[68%] sm:left-10', delay: 1.4 },
-  { text: 'deploy.status = "success";', position: 'right-2 top-[30%] sm:right-6', delay: 0.7 },
-  { text: 'if (code.works) { celebrate(); }', position: 'right-2 top-[74%] sm:right-10', delay: 2.1 },
+  { text: 'const future = () => you.build();', position: 'right-[30%] top-[12%]', delay: 0, visibility: 'hidden md:block' },
+  { text: 'deploy.status = "success";', position: 'right-[5%] top-[16%]', delay: 0.8, visibility: 'hidden md:block' },
+  { text: 'while (learning) { grow(); }', position: 'right-[16%] top-[48%]', delay: 1.6, visibility: 'hidden md:block' },
+  { text: 'if (code.works) { celebrate(); }', position: 'right-[5%] bottom-[20%]', delay: 2.2, visibility: 'hidden lg:block' },
+  { text: 'git push origin future;', position: 'right-[32%] bottom-[15%]', delay: 1.1, visibility: 'hidden lg:block' },
 ]
+
+const overlayGradient =
+  'linear-gradient(90deg, rgba(3,5,8,1) 0%, rgba(3,5,8,0.95) 28%, rgba(3,5,8,0.65) 48%, rgba(3,5,8,0.12) 75%, rgba(3,5,8,0.05) 100%)'
 
 export function Hero() {
   const headlineRef = useRef<HTMLHeadingElement>(null)
@@ -78,29 +82,32 @@ export function Hero() {
       ref={sectionRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative flex min-h-screen items-center overflow-hidden bg-void pt-28 pb-20 sm:pt-32"
+      className="relative flex min-h-[clamp(760px,84vh,880px)] items-center overflow-x-hidden bg-void py-24 sm:py-28 lg:py-32"
     >
-      <div aria-hidden="true" className="absolute inset-0">
-        <HeroParticles />
-
-        <motion.div
-          style={{ x: layerX, y: layerY }}
-          className="absolute left-1/2 top-1/2 h-[130%] w-[130%] max-w-none -translate-x-1/2 -translate-y-1/2 sm:h-[160%] sm:w-[110%]"
-        >
+      <div aria-hidden="true" className="absolute inset-0 z-0">
+        <motion.div style={{ x: layerX, y: layerY }} className="absolute inset-0 scale-110 sm:scale-125 lg:scale-110">
           <img
             src="/img/hero/hero-reference.png"
             alt=""
-            className="h-full w-full object-contain opacity-70 mix-blend-screen sm:opacity-80"
+            className="h-full w-full object-cover opacity-95 mix-blend-screen"
+            style={{ objectPosition: '58% 58%' }}
           />
         </motion.div>
 
-        <div className="absolute inset-0 bg-linear-to-b from-void via-transparent to-void" />
-        <div className="absolute inset-0 bg-linear-to-r from-void via-transparent to-void/60" />
+        <HeroParticles />
+
+        <div className="pointer-events-none absolute right-[16%] top-[30%] h-[46%] w-[40%] rounded-full bg-green/20 blur-[110px]" />
+        <div className="pointer-events-none absolute right-[6%] bottom-[6%] h-[38%] w-[32%] rounded-full bg-purple/15 blur-[110px]" />
+
+        <div className="pointer-events-none absolute inset-0" style={{ background: overlayGradient }} />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-linear-to-b from-void to-transparent sm:h-36" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-linear-to-t from-void to-transparent sm:h-36" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[64%] bg-linear-to-b from-void via-void/65 to-transparent lg:hidden" />
 
         {floatingCode.map((item) => (
           <span
             key={item.text}
-            className={`absolute hidden animate-float rounded-md border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-[11px] text-green/70 backdrop-blur-sm lg:block ${item.position}`}
+            className={`absolute animate-float rounded-md border border-white/10 bg-white/5 px-2.5 py-1 font-mono text-[10px] text-green/60 backdrop-blur-sm ${item.visibility} ${item.position}`}
             style={{ animationDelay: `${item.delay}s` }}
           >
             {item.text}
@@ -108,64 +115,76 @@ export function Hero() {
         ))}
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
-        <h1
-          ref={headlineRef}
-          className="font-display text-4xl font-extrabold uppercase leading-[1.05] tracking-tight sm:text-6xl md:text-7xl"
-        >
-          {headlineLines.map((line, lineIndex) => (
-            <span key={lineIndex} className="block overflow-hidden py-1">
-              {line.words.map((word) => (
-                <span
-                  key={word}
-                  data-word
-                  className={`mx-2 inline-block first:ml-0 ${line.highlight ? 'text-green' : 'text-ink'}`}
-                  style={line.highlight ? { textShadow: '0 0 40px rgba(46,234,83,0.45)' } : undefined}
-                >
-                  {word}
-                </span>
-              ))}
-            </span>
-          ))}
-        </h1>
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-start text-left lg:max-w-[600px]">
+          <motion.span
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-muted"
+          >
+            <Sparkles className="size-3.5 text-green" aria-hidden="true" />
+            A escola para quem quer virar o jogo
+          </motion.span>
 
-        <motion.p
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.6 }}
-          className="mt-6 max-w-2xl text-balance text-base text-muted sm:text-lg"
-        >
-          Do zero ao avançado com projetos reais, mentoria de especialistas e uma comunidade que impulsiona sua
-          carreira na tecnologia.
-        </motion.p>
+          <h1
+            ref={headlineRef}
+            className="mt-5 font-display text-3xl font-extrabold uppercase leading-[1.08] tracking-tight sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl"
+          >
+            {headlineLines.map((line, lineIndex) => (
+              <span key={lineIndex} className="block overflow-hidden py-1">
+                {line.words.map((word) => (
+                  <span
+                    key={word}
+                    data-word
+                    className={`mr-2 inline-block last:mr-0 sm:mr-3 ${line.highlight ? 'text-green' : 'text-ink'}`}
+                    style={line.highlight ? { textShadow: '0 0 40px rgba(46,234,83,0.45)' } : undefined}
+                  >
+                    {word}
+                  </span>
+                ))}
+              </span>
+            ))}
+          </h1>
 
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.8 }}
-          className="mt-8 flex flex-col items-center gap-4 sm:flex-row"
-        >
-          <Button href="#quero-ser-aluno" variant="primary" size="lg" showArrow>
-            Quero ser aluno
-          </Button>
-          <Button href="#formacoes" variant="secondary" size="lg">
-            Ver formações
-          </Button>
-        </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.6 }}
+            className="mt-6 max-w-md text-balance text-base text-muted sm:text-lg"
+          >
+            Do zero ao avançado com projetos reais, mentoria de especialistas e uma comunidade que impulsiona sua
+            carreira na tecnologia.
+          </motion.p>
 
-        <motion.ul
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1 }}
-          className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3"
-        >
-          {indicators.map(({ icon: Icon, label }) => (
-            <li key={label} className="flex items-center gap-2 text-sm text-muted">
-              <Icon className="size-4 text-green" aria-hidden="true" />
-              {label}
-            </li>
-          ))}
-        </motion.ul>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.8 }}
+            className="mt-8 flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center lg:w-auto lg:justify-start"
+          >
+            <Button href="#quero-ser-aluno" variant="primary" size="lg" showArrow>
+              Quero ser aluno
+            </Button>
+            <Button href="#formacoes" variant="secondary" size="lg">
+              Ver formações
+            </Button>
+          </motion.div>
+
+          <motion.ul
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 1 }}
+            className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3"
+          >
+            {indicators.map(({ icon: Icon, label }) => (
+              <li key={label} className="flex items-center gap-2 text-sm text-muted">
+                <Icon className="size-4 text-green" aria-hidden="true" />
+                {label}
+              </li>
+            ))}
+          </motion.ul>
+        </div>
       </div>
     </section>
   )

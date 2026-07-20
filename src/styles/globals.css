@@ -26,6 +26,10 @@
   html {
     scroll-behavior: auto;
     background-color: var(--color-void);
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #7c3aed #070a10;
   }
 
   body {
@@ -35,6 +39,7 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
+    overflow-y: visible;
   }
 
   h1,
@@ -60,12 +65,17 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--color-bg-primary);
+    background: #070a10;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(var(--color-purple), var(--color-green));
+    background: linear-gradient(180deg, #8b3dff 0%, #6d5cff 45%, #2eea53 100%);
     border-radius: 999px;
+    border: 2px solid #070a10;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #a75cff 0%, #7d68ff 45%, #39ff5a 100%);
   }
 }
 

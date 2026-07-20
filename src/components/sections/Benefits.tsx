@@ -21,7 +21,7 @@ export function Benefits() {
           description="Um ecossistema completo para transformar aprendizado em resultado real de carreira."
         />
 
-        <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid grid-cols-1 gap-5 overflow-x-clip sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon
             const variant = entranceVariants[index % entranceVariants.length]

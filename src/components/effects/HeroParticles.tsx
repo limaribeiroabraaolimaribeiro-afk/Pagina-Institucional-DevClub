@@ -23,7 +23,7 @@ function isLowPowerDevice() {
 export function HeroParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const prefersReducedMotion = useReducedMotion()
-  const isMobile = useMediaQuery('(max-width: 767px)')
+  const isCompactViewport = useMediaQuery('(max-width: 1023px)')
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -32,7 +32,7 @@ export function HeroParticles() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const lightMode = isMobile || isLowPowerDevice()
+    const lightMode = isCompactViewport || isLowPowerDevice()
     const particleCount = prefersReducedMotion ? 0 : lightMode ? 45 : 110
 
     let width = 0
@@ -161,7 +161,7 @@ export function HeroParticles() {
       canvas.removeEventListener('pointermove', handlePointerMove)
       canvas.removeEventListener('pointerleave', handlePointerLeave)
     }
-  }, [prefersReducedMotion, isMobile])
+  }, [prefersReducedMotion, isCompactViewport])
 
   return (
     <canvas

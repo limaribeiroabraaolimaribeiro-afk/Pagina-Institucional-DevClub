@@ -35,7 +35,7 @@ export function Header() {
           <img src="/img/brand/devclub-logo.png" alt="DevClub" className="h-7 w-auto sm:h-8" />
         </a>
 
-        <nav aria-label="Navegação principal" className="hidden lg:block">
+        <nav aria-label="Navegação principal" className="hidden xl:block">
           <ul className="flex items-center gap-8">
             {navItems.map((item) => (
               <li key={item.href}>
@@ -51,7 +51,7 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-3 xl:flex">
           <Button href="#area-do-aluno" variant="ghost" size="md">
             Área do aluno
           </Button>
@@ -66,7 +66,7 @@ export function Header() {
           aria-label={isMenuOpen ? 'Fechar menu' : 'Abrir menu'}
           aria-expanded={isMenuOpen}
           aria-controls="mobile-menu"
-          className="flex size-11 items-center justify-center rounded-full border border-white/10 text-ink lg:hidden"
+          className="flex size-11 items-center justify-center rounded-full border border-white/10 text-ink xl:hidden"
         >
           {isMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
         </button>
@@ -80,7 +80,7 @@ export function Header() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="overflow-hidden border-b border-white/10 bg-void/95 backdrop-blur-xl lg:hidden"
+            className="overflow-hidden border-b border-white/10 bg-void/95 backdrop-blur-xl xl:hidden"
           >
             <nav aria-label="Navegação mobile" className="flex flex-col gap-1 px-4 py-4">
               {navItems.map((item) => (
