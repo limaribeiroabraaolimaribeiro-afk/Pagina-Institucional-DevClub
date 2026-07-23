@@ -1,5 +1,16 @@
 export type ProjectLevel = 'Iniciante' | 'Intermediário' | 'Avançado'
-export type ProjectSize = 'sm' | 'md' | 'lg'
+export type ProjectSize = 'principal' | 'featured' | 'medio' | 'menor'
+export type ProjectAccent = 'green' | 'purple'
+export type ProjectPreviewType =
+  | 'ecommerce'
+  | 'dashboard'
+  | 'terminal'
+  | 'marketplace'
+  | 'streaming'
+  | 'todo'
+  | 'chat'
+  | 'finance'
+  | 'course'
 
 export interface Project {
   slug: string
@@ -8,6 +19,8 @@ export interface Project {
   stack: string[]
   level: ProjectLevel
   size: ProjectSize
+  accent: ProjectAccent
+  preview: ProjectPreviewType
 }
 
 export const projects: Project[] = [
@@ -17,7 +30,9 @@ export const projects: Project[] = [
     description: 'Loja virtual completa com carrinho, checkout e painel administrativo.',
     stack: ['Next.js', 'TypeScript', 'Stripe'],
     level: 'Avançado',
-    size: 'lg',
+    size: 'principal',
+    accent: 'green',
+    preview: 'ecommerce',
   },
   {
     slug: 'dashboard-analytics',
@@ -25,7 +40,9 @@ export const projects: Project[] = [
     description: 'Painel de métricas em tempo real com gráficos interativos.',
     stack: ['React', 'Recharts', 'Node.js'],
     level: 'Intermediário',
-    size: 'md',
+    size: 'featured',
+    accent: 'purple',
+    preview: 'dashboard',
   },
   {
     slug: 'api-rest-node',
@@ -33,7 +50,9 @@ export const projects: Project[] = [
     description: 'API escalável com autenticação, testes e documentação.',
     stack: ['Node.js', 'Express', 'PostgreSQL'],
     level: 'Intermediário',
-    size: 'sm',
+    size: 'medio',
+    accent: 'purple',
+    preview: 'terminal',
   },
   {
     slug: 'marketplace',
@@ -41,7 +60,9 @@ export const projects: Project[] = [
     description: 'Plataforma multi-vendedor com gestão de pedidos e pagamentos.',
     stack: ['React', 'Node.js', 'MongoDB'],
     level: 'Avançado',
-    size: 'md',
+    size: 'medio',
+    accent: 'green',
+    preview: 'marketplace',
   },
   {
     slug: 'clone-netflix',
@@ -49,7 +70,9 @@ export const projects: Project[] = [
     description: 'Streaming com catálogo dinâmico, player e listas personalizadas.',
     stack: ['React', 'Tailwind CSS', 'Firebase'],
     level: 'Intermediário',
-    size: 'lg',
+    size: 'medio',
+    accent: 'purple',
+    preview: 'streaming',
   },
   {
     slug: 'app-tarefas',
@@ -57,7 +80,9 @@ export const projects: Project[] = [
     description: 'Organização pessoal com lembretes e sincronização em nuvem.',
     stack: ['React Native', 'TypeScript'],
     level: 'Iniciante',
-    size: 'sm',
+    size: 'menor',
+    accent: 'green',
+    preview: 'todo',
   },
   {
     slug: 'chatbot-ia',
@@ -65,7 +90,9 @@ export const projects: Project[] = [
     description: 'Assistente conversacional integrado a modelos de linguagem.',
     stack: ['Python', 'Claude', 'FastAPI'],
     level: 'Avançado',
-    size: 'md',
+    size: 'menor',
+    accent: 'purple',
+    preview: 'chat',
   },
   {
     slug: 'sistema-financeiro',
@@ -73,7 +100,9 @@ export const projects: Project[] = [
     description: 'Controle de receitas, despesas e relatórios consolidados.',
     stack: ['React', 'Node.js', 'SQL'],
     level: 'Intermediário',
-    size: 'sm',
+    size: 'menor',
+    accent: 'green',
+    preview: 'finance',
   },
   {
     slug: 'plataforma-cursos',
@@ -81,6 +110,8 @@ export const projects: Project[] = [
     description: 'Ambiente de ensino com trilhas, progresso e certificados.',
     stack: ['Next.js', 'PostgreSQL', 'Docker'],
     level: 'Avançado',
-    size: 'md',
+    size: 'menor',
+    accent: 'purple',
+    preview: 'course',
   },
 ]
