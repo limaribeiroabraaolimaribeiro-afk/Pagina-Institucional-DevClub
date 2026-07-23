@@ -29,10 +29,10 @@ const cardConfig: Record<
     height: 'lg:h-[460px]',
     previewHeight: 'aspect-video lg:aspect-auto lg:h-[62%]',
     padding: 'p-5 sm:p-6',
-    titleSize: 'text-xl sm:text-2xl',
+    titleSize: 'text-2xl sm:text-3xl',
     descSize: 'text-sm',
     descClamp: 'line-clamp-2',
-    gap: 'gap-2',
+    gap: 'gap-2.5',
     tagCount: 3,
   },
   featured: {
@@ -56,16 +56,18 @@ const cardConfig: Record<
     tagCount: 2,
   },
   menor: {
-    height: 'lg:h-[260px]',
-    previewHeight: 'aspect-video lg:aspect-auto lg:h-[56%]',
+    height: 'lg:h-[270px]',
+    previewHeight: 'aspect-video lg:aspect-auto lg:h-[52%]',
     padding: 'p-3.5',
     titleSize: 'text-sm sm:text-base',
     descSize: 'text-[11px]',
-    descClamp: 'line-clamp-1',
+    descClamp: 'line-clamp-2',
     gap: 'gap-1',
     tagCount: 2,
   },
 }
+
+const tallSlugs = new Set(['chatbot-ia', 'plataforma-cursos'])
 
 const levelColor: Record<string, string> = {
   Iniciante: 'text-green border-green/30 bg-green/10',
@@ -91,6 +93,9 @@ export function Projects() {
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4 lg:grid-cols-12">
           {projects.map((project, index) => {
             const config = cardConfig[project.size]
+            const isPrincipal = project.size === 'principal'
+            const isTall = tallSlugs.has(project.slug)
+            const heightClass = isTall ? 'lg:h-[288px]' : config.height
             return (
               <motion.article
                 key={project.slug}
@@ -98,7 +103,11 @@ export function Projects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.5, delay: (index % 5) * 0.06 }}
-                className={`group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-card transition-all duration-300 hover:-translate-y-1 ${accentGlow[project.accent]} ${colSpan[project.size]} ${config.height}`}
+                className={`group flex flex-col overflow-hidden rounded-2xl border bg-card transition-all duration-300 hover:-translate-y-1 ${accentGlow[project.accent]} ${colSpan[project.size]} ${heightClass} ${
+                  isPrincipal
+                    ? 'border-green/25 shadow-[0_0_50px_-28px_rgba(46,234,83,0.55)]'
+                    : 'border-white/10'
+                }`}
               >
                 <div className={`relative w-full shrink-0 overflow-hidden ${config.previewHeight}`}>
                   <div className="size-full transition-transform duration-500 ease-out group-hover:scale-[1.04]">
@@ -127,13 +136,23 @@ export function Projects() {
 
                   <p className={`${config.descClamp} ${config.descSize} text-muted`}>{project.description}</p>
 
-                  <a
-                    href="#"
-                    className="mt-auto inline-flex w-fit items-center gap-1 pt-1 text-xs font-semibold text-green transition-transform duration-300 group-hover:translate-x-0.5"
-                  >
-                    Ver projeto
-                    <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                  </a>
+                  {isPrincipal ? (
+                    <a
+                      href="#"
+                      className="mt-auto inline-flex w-fit items-center gap-1.5 rounded-full border border-green/30 bg-green/15 px-4 py-2 text-sm font-semibold text-green transition-all duration-300 hover:gap-2 hover:bg-green/25"
+                    >
+                      Ver projeto
+                      <ArrowUpRight className="size-4" aria-hidden="true" />
+                    </a>
+                  ) : (
+                    <a
+                      href="#"
+                      className="mt-auto inline-flex w-fit items-center gap-1 pt-1 text-xs font-semibold text-green opacity-100 transition-all duration-300 lg:opacity-0 lg:group-hover:translate-x-0.5 lg:group-hover:opacity-100"
+                    >
+                      Ver projeto
+                      <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                    </a>
+                  )}
                 </div>
               </motion.article>
             )

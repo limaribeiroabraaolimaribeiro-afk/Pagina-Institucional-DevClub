@@ -37,7 +37,7 @@ export const projects: Project[] = [
   {
     slug: 'dashboard-analytics',
     name: 'Dashboard Analytics',
-    description: 'Painel de métricas em tempo real com gráficos interativos.',
+    description: 'Métricas em tempo real com gráficos interativos.',
     stack: ['React', 'Recharts', 'Node.js'],
     level: 'Intermediário',
     size: 'featured',
@@ -47,7 +47,7 @@ export const projects: Project[] = [
   {
     slug: 'api-rest-node',
     name: 'API REST com Node.js',
-    description: 'API escalável com autenticação, testes e documentação.',
+    description: 'API escalável com autenticação e testes.',
     stack: ['Node.js', 'Express', 'PostgreSQL'],
     level: 'Intermediário',
     size: 'medio',
@@ -57,7 +57,7 @@ export const projects: Project[] = [
   {
     slug: 'marketplace',
     name: 'Marketplace',
-    description: 'Plataforma multi-vendedor com gestão de pedidos e pagamentos.',
+    description: 'Plataforma multi-vendedor com gestão de pedidos.',
     stack: ['React', 'Node.js', 'MongoDB'],
     level: 'Avançado',
     size: 'medio',
@@ -67,7 +67,7 @@ export const projects: Project[] = [
   {
     slug: 'clone-netflix',
     name: 'Clone da Netflix',
-    description: 'Streaming com catálogo dinâmico, player e listas personalizadas.',
+    description: 'Streaming com catálogo dinâmico e player integrado.',
     stack: ['React', 'Tailwind CSS', 'Firebase'],
     level: 'Intermediário',
     size: 'medio',
@@ -77,7 +77,7 @@ export const projects: Project[] = [
   {
     slug: 'app-tarefas',
     name: 'Aplicativo de tarefas',
-    description: 'Organização pessoal com lembretes e sincronização em nuvem.',
+    description: 'Organização pessoal com lembretes e sincronização.',
     stack: ['React Native', 'TypeScript'],
     level: 'Iniciante',
     size: 'menor',
@@ -87,7 +87,7 @@ export const projects: Project[] = [
   {
     slug: 'chatbot-ia',
     name: 'Chatbot com IA',
-    description: 'Assistente conversacional integrado a modelos de linguagem.',
+    description: 'Assistente conversacional com IA integrada.',
     stack: ['Python', 'Claude', 'FastAPI'],
     level: 'Avançado',
     size: 'menor',
@@ -97,7 +97,7 @@ export const projects: Project[] = [
   {
     slug: 'sistema-financeiro',
     name: 'Sistema financeiro',
-    description: 'Controle de receitas, despesas e relatórios consolidados.',
+    description: 'Controle de receitas, despesas e relatórios.',
     stack: ['React', 'Node.js', 'SQL'],
     level: 'Intermediário',
     size: 'menor',
@@ -107,7 +107,7 @@ export const projects: Project[] = [
   {
     slug: 'plataforma-cursos',
     name: 'Plataforma de cursos',
-    description: 'Ambiente de ensino com trilhas, progresso e certificados.',
+    description: 'Ambiente de ensino com trilhas e certificados.',
     stack: ['Next.js', 'PostgreSQL', 'Docker'],
     level: 'Avançado',
     size: 'menor',
