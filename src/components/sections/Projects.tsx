@@ -1,88 +1,65 @@
-import { motion } from 'framer-motion'
+import { useRef, type MouseEvent as ReactMouseEvent } from 'react'
+import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
-import { projects, type ProjectSize } from '../../data/projects'
+import { projects } from '../../data/projects'
 import { SectionTitle } from '../ui/SectionTitle'
 import { ProjectPreview } from '../ui/ProjectPreview'
-import { Button } from '../ui/Button'
+import { ProjectsParticles } from '../effects/ProjectsParticles'
+import { ProjectsEnergyLines } from '../effects/ProjectsEnergyLines'
+import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 
-const colSpan: Record<ProjectSize, string> = {
-  principal: 'sm:col-span-2 lg:col-span-12 xl:col-span-7',
-  featured: 'sm:col-span-2 lg:col-span-6 xl:col-span-5',
-  medio: 'sm:col-span-1 lg:col-span-6 xl:col-span-4',
-  menor: 'sm:col-span-1 lg:col-span-6 xl:col-span-3',
-}
-
-const cardConfig: Record<
-  ProjectSize,
-  {
-    height: string
-    previewHeight: string
-    padding: string
-    titleSize: string
-    descSize: string
-    descClamp: string
-    gap: string
-    tagCount: number
-  }
-> = {
-  principal: {
-    height: 'lg:h-[460px]',
-    previewHeight: 'aspect-video lg:aspect-auto lg:h-[62%]',
-    padding: 'p-5 sm:p-6',
-    titleSize: 'text-2xl sm:text-3xl',
-    descSize: 'text-sm',
-    descClamp: 'line-clamp-2',
-    gap: 'gap-2.5',
-    tagCount: 3,
-  },
-  featured: {
-    height: 'lg:h-[335px]',
-    previewHeight: 'aspect-video lg:aspect-auto lg:h-[60%]',
-    padding: 'p-4',
-    titleSize: 'text-base sm:text-lg',
-    descSize: 'text-xs',
-    descClamp: 'line-clamp-2',
-    gap: 'gap-1.5',
-    tagCount: 2,
-  },
-  medio: {
-    height: 'lg:h-[335px]',
-    previewHeight: 'aspect-video lg:aspect-auto lg:h-[60%]',
-    padding: 'p-4',
-    titleSize: 'text-base sm:text-lg',
-    descSize: 'text-xs',
-    descClamp: 'line-clamp-2',
-    gap: 'gap-1.5',
-    tagCount: 2,
-  },
-  menor: {
-    height: 'lg:h-[270px]',
-    previewHeight: 'aspect-video lg:aspect-auto lg:h-[52%]',
-    padding: 'p-3.5',
-    titleSize: 'text-sm sm:text-base',
-    descSize: 'text-[11px]',
-    descClamp: 'line-clamp-2',
-    gap: 'gap-1',
-    tagCount: 2,
-  },
-}
-
-const tallSlugs = new Set(['chatbot-ia', 'plataforma-cursos'])
-
-const levelColor: Record<string, string> = {
-  Iniciante: 'text-green border-green/30 bg-green/10',
-  Intermediário: 'text-purple-bright border-purple/30 bg-purple/10',
-  Avançado: 'text-ink border-white/20 bg-white/5',
-}
-
-const accentGlow: Record<'green' | 'purple', string> = {
-  green: 'hover:border-green/40 hover:shadow-[0_0_36px_-14px_rgba(46,234,83,0.5)]',
-  purple: 'hover:border-purple/40 hover:shadow-[0_0_36px_-14px_rgba(139,61,255,0.5)]',
+const sceneMaskStyle = {
+  WebkitMaskImage: 'radial-gradient(ellipse 94% 90% at 50% 50%, black 66%, transparent 100%)',
+  maskImage: 'radial-gradient(ellipse 94% 90% at 50% 50%, black 66%, transparent 100%)',
 }
 
 export function Projects() {
+  const prefersReducedMotion = useReducedMotion()
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
+  const isTabletUp = useMediaQuery('(min-width: 640px)')
+  const tier: 'desktop' | 'tablet' | 'mobile' = isDesktop ? 'desktop' : isTabletUp ? 'tablet' : 'mobile'
+
+  const sceneRef = useRef<HTMLDivElement>(null)
+
+  const mvX = useMotionValue(0)
+  const mvY = useMotionValue(0)
+  const mvRotX = useMotionValue(0)
+  const mvRotY = useMotionValue(0)
+  const springConfig = { stiffness: 70, damping: 18, mass: 0.5 }
+  const x = useSpring(mvX, springConfig)
+  const y = useSpring(mvY, springConfig)
+  const rotX = useSpring(mvRotX, springConfig)
+  const rotY = useSpring(mvRotY, springConfig)
+  const backX = useTransform(x, (value) => value * 0.4)
+  const backY = useTransform(y, (value) => value * 0.4)
+
+  const { scrollYProgress } = useScroll({ target: sceneRef, offset: ['start end', 'end start'] })
+  const scrollShift = useTransform(scrollYProgress, [0, 1], prefersReducedMotion ? [0, 0] : [-10, 10])
+  const scrollShiftSpring = useSpring(scrollShift, { stiffness: 60, damping: 20, mass: 0.5 })
+
+  function handleMouseMove(event: ReactMouseEvent<HTMLDivElement>) {
+    if (prefersReducedMotion || tier === 'mobile') return
+    const bounds = event.currentTarget.getBoundingClientRect()
+    const relX = (event.clientX - bounds.left) / bounds.width - 0.5
+    const relY = (event.clientY - bounds.top) / bounds.height - 0.5
+    const parallaxMax = tier === 'desktop' ? 14 : 8
+    const rotateMax = tier === 'desktop' ? 3 : 1.5
+    mvX.set(relX * parallaxMax * 2)
+    mvY.set(relY * parallaxMax * 2)
+    mvRotY.set(relX * rotateMax * 2)
+    mvRotX.set(-relY * rotateMax * 2)
+  }
+
+  function handleMouseLeave() {
+    mvX.set(0)
+    mvY.set(0)
+    mvRotX.set(0)
+    mvRotY.set(0)
+  }
+
   return (
-    <section className="relative bg-void py-16 sm:py-20">
+    <section className="relative overflow-x-hidden bg-void py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionTitle
           eyebrow="Portfólio"
@@ -90,79 +67,118 @@ export function Projects() {
           description="Aplicações completas para você aprender fazendo, do primeiro commit ao deploy."
         />
 
-        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4 lg:grid-cols-12">
-          {projects.map((project, index) => {
-            const config = cardConfig[project.size]
-            const isPrincipal = project.size === 'principal'
-            const isTall = tallSlugs.has(project.slug)
-            const heightClass = isTall ? 'lg:h-[288px]' : config.height
-            return (
-              <motion.article
+        <motion.div
+          initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96, filter: 'blur(10px)' }}
+          whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.9, ease: 'easeOut', delay: 0.15 }}
+          className="relative mx-auto mt-12 sm:mt-14 lg:mt-16"
+        >
+          <motion.div
+            ref={sceneRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{ y: scrollShiftSpring, perspective: '1400px' }}
+            className="relative mx-auto w-full sm:w-[92%] lg:w-[84%]"
+          >
+            <motion.div
+              aria-hidden="true"
+              className="pointer-events-none absolute -left-[8%] top-[4%] h-[55%] w-[46%] rounded-full bg-green/25 blur-[100px]"
+              animate={prefersReducedMotion ? undefined : { opacity: [0.35, 0.55, 0.35] }}
+              transition={prefersReducedMotion ? undefined : { duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+              style={prefersReducedMotion ? { opacity: 0.32 } : undefined}
+            />
+            <motion.div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-[6%] bottom-[2%] h-[50%] w-[42%] rounded-full bg-purple/25 blur-[100px]"
+              animate={prefersReducedMotion ? undefined : { opacity: [0.3, 0.5, 0.3] }}
+              transition={
+                prefersReducedMotion ? undefined : { duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }
+              }
+              style={prefersReducedMotion ? { opacity: 0.28 } : undefined}
+            />
+
+            <div className="pointer-events-none absolute inset-0">
+              <ProjectsEnergyLines />
+            </div>
+
+            <motion.div
+              aria-hidden="true"
+              style={{ x: backX, y: backY }}
+              className="pointer-events-none absolute inset-0 scale-105 overflow-hidden rounded-[28px] opacity-40 blur-2xl"
+            >
+              <img src="/img/hero/hero-projetos.png" alt="" className="h-full w-full object-cover" />
+            </motion.div>
+
+            <motion.div style={{ x, y, rotateX: rotX, rotateY: rotY }} className="relative">
+              <motion.div
+                animate={prefersReducedMotion ? undefined : { scale: [1, 1.025, 1] }}
+                transition={
+                  prefersReducedMotion ? undefined : { duration: 8, repeat: Infinity, ease: 'easeInOut' }
+                }
+                className="relative aspect-video w-full overflow-hidden rounded-[28px] ring-1 ring-white/10 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.85)]"
+              >
+                <img
+                  src="/img/hero/hero-projetos.png"
+                  alt="Ilustração de painéis de aplicações — e-commerce, streaming, dashboard, API, chatbot com IA e sistema financeiro — orbitando um núcleo de código, representando os projetos práticos do portfólio DevClub."
+                  className="h-full w-full object-cover"
+                  style={sceneMaskStyle}
+                />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background:
+                      'radial-gradient(ellipse 90% 85% at 50% 50%, transparent 55%, rgba(3,5,8,0.9) 100%)',
+                  }}
+                />
+              </motion.div>
+            </motion.div>
+
+            <div className="pointer-events-none absolute -inset-6 z-10 sm:-inset-10">
+              <ProjectsParticles />
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <div className="mt-14 sm:mt-16">
+          <p className="mb-5 text-xs font-semibold uppercase tracking-widest text-muted">Mais projetos</p>
+          <ul className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {projects.map((project, index) => (
+              <motion.li
                 key={project.slug}
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.5, delay: (index % 5) * 0.06 }}
-                className={`group flex flex-col overflow-hidden rounded-2xl border bg-card transition-all duration-300 hover:-translate-y-1 ${accentGlow[project.accent]} ${colSpan[project.size]} ${heightClass} ${
-                  isPrincipal
-                    ? 'border-green/25 shadow-[0_0_50px_-28px_rgba(46,234,83,0.55)]'
-                    : 'border-white/10'
-                }`}
+                transition={{ duration: 0.4, delay: (index % 6) * 0.05 }}
+                className="group w-[210px] shrink-0 snap-start overflow-hidden rounded-xl border border-white/10 bg-card transition-all duration-300 hover:-translate-y-1 hover:border-green/30 sm:w-[230px]"
               >
-                <div className={`relative w-full shrink-0 overflow-hidden ${config.previewHeight}`}>
-                  <div className="size-full transition-transform duration-500 ease-out group-hover:scale-[1.04]">
-                    <ProjectPreview type={project.preview} accent={project.accent} />
-                  </div>
+                <div className="h-24 w-full overflow-hidden sm:h-28">
+                  <ProjectPreview type={project.preview} accent={project.accent} />
                 </div>
-
-                <div className={`flex flex-1 flex-col ${config.gap} ${config.padding}`}>
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <span
-                      className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${levelColor[project.level]}`}
-                    >
-                      {project.level}
-                    </span>
-                    {project.stack.slice(0, config.tagCount).map((tech) => (
+                <div className="flex flex-col gap-1.5 p-3.5">
+                  <h3 className="truncate text-sm font-semibold text-ink">{project.name}</h3>
+                  <div className="flex flex-wrap gap-1">
+                    {project.stack.slice(0, 2).map((tech) => (
                       <span
                         key={tech}
-                        className="rounded-full border border-white/10 px-2 py-0.5 text-[10px] text-muted"
+                        className="rounded-full border border-white/10 px-1.5 py-0.5 text-[10px] text-muted"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
-
-                  <h3 className={`font-semibold text-ink ${config.titleSize}`}>{project.name}</h3>
-
-                  <p className={`${config.descClamp} ${config.descSize} text-muted`}>{project.description}</p>
-
-                  {isPrincipal ? (
-                    <a
-                      href="#"
-                      className="mt-auto inline-flex w-fit items-center gap-1.5 rounded-full border border-green/30 bg-green/15 px-4 py-2 text-sm font-semibold text-green transition-all duration-300 hover:gap-2 hover:bg-green/25"
-                    >
-                      Ver projeto
-                      <ArrowUpRight className="size-4" aria-hidden="true" />
-                    </a>
-                  ) : (
-                    <a
-                      href="#"
-                      className="mt-auto inline-flex w-fit items-center gap-1 pt-1 text-xs font-semibold text-green opacity-100 transition-all duration-300 lg:opacity-0 lg:group-hover:translate-x-0.5 lg:group-hover:opacity-100"
-                    >
-                      Ver projeto
-                      <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                    </a>
-                  )}
+                  <a
+                    href="#"
+                    className="mt-1 inline-flex w-fit items-center gap-1 rounded-full text-xs font-semibold text-green transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green group-hover:gap-1.5"
+                  >
+                    Ver projeto
+                    <ArrowUpRight className="size-3" aria-hidden="true" />
+                  </a>
                 </div>
-              </motion.article>
-            )
-          })}
-        </div>
-
-        <div className="mt-8 flex justify-center">
-          <Button href="#" variant="secondary" size="md" showArrow>
-            Ver todos os projetos
-          </Button>
+              </motion.li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
