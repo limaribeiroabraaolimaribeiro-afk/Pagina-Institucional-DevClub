@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { ArrowRight, Check } from 'lucide-react'
 import { footerLinks } from '../../data/nav'
 import { GithubIcon, InstagramIcon, LinkedinIcon, YoutubeIcon } from '../ui/SocialIcons'
+import { assetUrl } from '../../lib/assetUrl'
 
 const socials = [
   { label: 'Instagram', icon: InstagramIcon, href: '#' },
@@ -32,7 +33,7 @@ export function Footer() {
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
           <div className="flex max-w-[240px] flex-col gap-3.5">
             <img
-              src="/img/brand/devclub-logo.png"
+              src={assetUrl('/img/brand/devclub-logo.png')}
               alt="DevClub"
               style={{ width: 'auto', height: '28px', maxWidth: '160px' }}
               className="object-contain"

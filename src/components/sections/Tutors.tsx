@@ -4,6 +4,7 @@ import { Plus, X, User } from 'lucide-react'
 import { tutors, type Tutor } from '../../data/tutors'
 import { SectionTitle } from '../ui/SectionTitle'
 import { GithubIcon, InstagramIcon, LinkedinIcon } from '../ui/SocialIcons'
+import { assetUrl } from '../../lib/assetUrl'
 
 const socialIcons = { linkedin: LinkedinIcon, github: GithubIcon, instagram: InstagramIcon } as const
 
@@ -22,7 +23,7 @@ function TutorPhoto({ tutor, className }: { tutor: Tutor; className?: string }) 
 
   return (
     <img
-      src={tutor.photo}
+      src={assetUrl(tutor.photo)}
       alt={`Retrato ilustrativo de ${tutor.name}`}
       loading="lazy"
       onError={() => setFailed(true)}

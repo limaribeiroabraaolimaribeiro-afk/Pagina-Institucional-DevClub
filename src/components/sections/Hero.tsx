@@ -5,6 +5,7 @@ import { CheckCircle2, ShieldCheck, Sparkles, Users } from 'lucide-react'
 import { HeroParticles } from '../effects/HeroParticles'
 import { Button } from '../ui/Button'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { assetUrl } from '../../lib/assetUrl'
 
 const headlineLines = [
   { words: ['SEU', 'CÓDIGO'], highlight: false },
@@ -87,7 +88,7 @@ export function Hero() {
       <div aria-hidden="true" className="absolute inset-0 z-0">
         <motion.div style={{ x: layerX, y: layerY }} className="absolute inset-0 scale-110 sm:scale-125 lg:scale-110">
           <img
-            src="/img/hero/hero-reference.png"
+            src={assetUrl('/img/hero/hero-reference.png')}
             alt=""
             className="h-full w-full object-cover opacity-95 mix-blend-screen"
             style={{ objectPosition: '58% 58%' }}

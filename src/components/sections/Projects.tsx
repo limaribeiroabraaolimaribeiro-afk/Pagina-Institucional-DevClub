@@ -8,6 +8,7 @@ import { ProjectsParticles } from '../effects/ProjectsParticles'
 import { ProjectsEnergyLines } from '../effects/ProjectsEnergyLines'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
+import { assetUrl } from '../../lib/assetUrl'
 
 const sceneMaskStyle = {
   WebkitMaskImage: 'radial-gradient(ellipse 94% 90% at 50% 50%, black 66%, transparent 100%)',
@@ -107,7 +108,7 @@ export function Projects() {
               style={{ x: backX, y: backY }}
               className="pointer-events-none absolute inset-0 scale-105 overflow-hidden rounded-[28px] opacity-40 blur-2xl"
             >
-              <img src="/img/hero/hero-projetos.png" alt="" className="h-full w-full object-cover" />
+              <img src={assetUrl('/img/hero/hero-projetos.png')} alt="" className="h-full w-full object-cover" />
             </motion.div>
 
             <motion.div style={{ x, y, rotateX: rotX, rotateY: rotY }} className="relative">
@@ -119,7 +120,7 @@ export function Projects() {
                 className="relative aspect-video w-full overflow-hidden rounded-[28px] ring-1 ring-white/10 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.85)]"
               >
                 <img
-                  src="/img/hero/hero-projetos.png"
+                  src={assetUrl('/img/hero/hero-projetos.png')}
                   alt="Ilustração de painéis de aplicações — e-commerce, streaming, dashboard, API, chatbot com IA e sistema financeiro — orbitando um núcleo de código, representando os projetos práticos do portfólio DevClub."
                   className="h-full w-full object-cover"
                   style={sceneMaskStyle}

@@ -133,7 +133,94 @@ O projeto é uma SPA estática comum (Vite). Após `npm run build`, publique a p
 - **Vercel**: framework preset "Vite", build command `npm run build`, output `dist`.
 - **Netlify**: build command `npm run build`, publish directory `dist`.
 - **Cloudflare Pages**: build command `npm run build`, output directory `dist`.
-- **GitHub Pages**: publique o conteúdo de `dist/` (ex.: via `gh-pages` ou Actions); como as rotas são todas âncoras de uma única página (`#formacoes`, etc.), não é necessário configurar rewrites de SPA.
+- **GitHub Pages**: ver seção dedicada abaixo.
+
+## Publicar no GitHub Pages
+
+O deploy é automático via GitHub Actions (`.github/workflows/deploy-pages.yml`): a cada push em `main`, o workflow instala dependências, roda `typecheck`, `lint` e `build`, e publica o conteúdo de `dist/` no GitHub Pages. Não usa a branch `gh-pages`, o pacote `gh-pages` nem deploy manual — é o método oficial "Deploy from GitHub Actions".
+
+### Requisitos
+
+- Node.js 20+ e npm.
+- Uma conta no GitHub e um repositório (pode ser criado do zero ou já existir).
+
+### 1. Instalação e execução local
+
+```bash
+npm install
+npm run dev       # http://localhost:5173
+```
+
+### 2. Build e preview de produção
+
+```bash
+npm run build      # gera dist/
+npm run preview    # serve dist/ localmente, simulando produção
+```
+
+### 3. `base` do Vite
+
+O `vite.config.ts` já está configurado com o `base` correto para este repositório:
+
+```ts
+base: '/Pagina-Institucional-DevClub/',
+```
+
+Se algum dia o projeto for publicado em outro repositório, ajuste esse valor:
+
+- repositório comum → `base: '/NOME-EXATO-DO-REPOSITORIO/'`
+- repositório `SEU-USUARIO.github.io` → `base: '/'`
+
+Todas as imagens (`<img src>`) usam o helper `src/lib/assetUrl.ts`, que prefixa o caminho com `import.meta.env.BASE_URL` — por isso não é necessário caçar caminhos quebrados ao trocar o `base`.
+
+### 4. Criar o repositório e configurar o remote
+
+> Este projeto **já tem um remote configurado** (ver abaixo), então pule para o passo 5.
+
+Para um projeto novo, do zero:
+
+```bash
+git init
+git add .
+git commit -m "Publica página institucional DevClub"
+git branch -M main
+git remote add origin https://github.com/SEU-USUARIO/NOME-DO-REPOSITORIO.git
+git push -u origin main
+```
+
+### 5. Remote atual deste projeto
+
+```
+origin  https://github.com/limaribeiroabraaolimaribeiro-afk/Pagina-Institucional-DevClub.git
+branch: main (já rastreando origin/main)
+```
+
+Como o remote já existe e a branch já está configurada, para publicar as alterações preparadas nesta tarefa basta:
+
+```bash
+git add .
+git commit -m "Prepara projeto para publicação no GitHub Pages"
+git push
+```
+
+### 6. Ativar o GitHub Pages
+
+No repositório, no GitHub:
+
+1. **Settings** → **Pages**
+2. Em **Build and deployment** → **Source**, selecione **GitHub Actions**
+3. Faça (ou aguarde) um push em `main` — o workflow `Deploy GitHub Pages` roda automaticamente e publica o site
+4. Acompanhe o progresso em **Actions**; ao final, a URL publicada aparece em **Settings → Pages**
+
+### 7. URL esperada
+
+```
+https://limaribeiroabraaolimaribeiro-afk.github.io/Pagina-Institucional-DevClub/
+```
+
+### Rotas internas
+
+O site é uma SPA de página única: os links do menu e dos botões (`#formacoes`, `#projetos`, `#tutores`, `#quero-ser-aluno`, ...) são âncoras internas da mesma página, não rotas de um router. Isso significa que não há risco de 404 ao atualizar a página (refresh) em nenhuma URL do site — não é necessário `HashRouter` nem configuração especial de SPA fallback.
 
 ## Pontos que dependem de conteúdo real
 

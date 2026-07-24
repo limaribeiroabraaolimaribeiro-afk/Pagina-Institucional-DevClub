@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { navItems } from '../../data/nav'
 import { Button } from '../ui/Button'
+import { assetUrl } from '../../lib/assetUrl'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -32,7 +33,7 @@ export function Header() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:h-20 lg:px-8">
         <a href="#top" className="flex items-center gap-2 shrink-0">
-          <img src="/img/brand/devclub-logo.png" alt="DevClub" className="h-7 w-auto sm:h-8" />
+          <img src={assetUrl('/img/brand/devclub-logo.png')} alt="DevClub" className="h-7 w-auto sm:h-8" />
         </a>
 
         <nav aria-label="Navegação principal" className="hidden xl:block">

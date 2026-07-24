@@ -13,6 +13,7 @@ import {
 } from '../../data/platform'
 import { AnimatedGrid } from '../effects/AnimatedGrid'
 import { AnimatedCounter } from '../ui/AnimatedCounter'
+import { assetUrl } from '../../lib/assetUrl'
 import { Button } from '../ui/Button'
 
 function WidgetBadge({ widget }: { widget: FloatingWidget }) {
@@ -257,7 +258,7 @@ export function PlatformPreview() {
                       className="relative size-9 overflow-hidden rounded-full border-2 border-card"
                       style={{ zIndex: onlineMembers.length - index }}
                     >
-                      <img src={member.photo} alt="" loading="lazy" className="h-full w-full object-cover" />
+                      <img src={assetUrl(member.photo)} alt="" loading="lazy" className="h-full w-full object-cover" />
                       {member.online && (
                         <span className="absolute -bottom-0.5 -right-0.5 size-2.5 animate-blink rounded-full border-2 border-card bg-green" />
                       )}

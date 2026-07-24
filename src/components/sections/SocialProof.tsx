@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { companies, type Company } from '../../data/companies'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { assetUrl } from '../../lib/assetUrl'
 
 function CompanyLogo({ company, className }: { company: Company; className: string }) {
   return (
     <span className="inline-flex shrink-0 bg-surface opacity-80 transition-opacity duration-300 hover:opacity-100">
-      <img src={company.logo} alt={company.name} loading="lazy" className={`${className} mix-blend-screen`} />
+      <img src={assetUrl(company.logo)} alt={company.name} loading="lazy" className={`${className} mix-blend-screen`} />
     </span>
   )
 }
@@ -77,7 +78,7 @@ export function SocialProof() {
                   className="relative size-12 shrink-0 overflow-hidden rounded-full border-[3px] border-surface sm:size-14"
                   style={{ zIndex: studentPhotos.length - index, boxShadow: `inset 0 0 0 1.5px ${photo.accent}` }}
                 >
-                  <img src={photo.src} alt="" loading="lazy" className="h-full w-full object-cover" />
+                  <img src={assetUrl(photo.src)} alt="" loading="lazy" className="h-full w-full object-cover" />
                 </div>
               ))}
             </div>

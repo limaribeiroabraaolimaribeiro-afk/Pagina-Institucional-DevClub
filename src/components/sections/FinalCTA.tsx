@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Button } from '../ui/Button'
+import { assetUrl } from '../../lib/assetUrl'
 
 export function FinalCTA() {
   return (
@@ -15,7 +16,7 @@ export function FinalCTA() {
       />
 
       <motion.img
-        src="/img/cta/final-cta.png"
+        src={assetUrl('/img/cta/final-cta.png')}
         alt=""
         aria-hidden="true"
         initial={{ opacity: 0, scale: 0.9 }}

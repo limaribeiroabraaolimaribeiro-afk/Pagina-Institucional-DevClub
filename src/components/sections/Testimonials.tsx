@@ -4,6 +4,7 @@ import { Play, Star, X } from 'lucide-react'
 import { featuredTestimonial, testimonials } from '../../data/testimonials'
 import { SectionTitle } from '../ui/SectionTitle'
 import { GlowCard } from '../ui/GlowCard'
+import { assetUrl } from '../../lib/assetUrl'
 
 export function Testimonials() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -40,7 +41,7 @@ export function Testimonials() {
               aria-haspopup="dialog"
             >
               <img
-                src={featuredTestimonial.thumbnail}
+                src={assetUrl(featuredTestimonial.thumbnail)}
                 alt={`Depoimento em vídeo de ${featuredTestimonial.name}`}
                 className="size-full object-cover"
               />
